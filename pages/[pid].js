@@ -1,26 +1,24 @@
 import { useRouter } from 'next/router'
 import Layout from "../components/Layout"
 import Link from 'next/link'
-import { useState } from 'react'
-import { useEffect } from "react"
 
-export default function Post() {
+const Post = ({posts}) => {
   const router = useRouter()
   const { pid } = router.query
 
-  const [posts, setPosts] = useState([])
-  const [kategori, setKategori] = useState([])
+  // const [posts, setPosts] = useState([])
+  // const [kategori, setKategori] = useState([])
 
-  const get = async () => {
-    const response = await fetch(`${process.env.urlApi}/${pid}`)
-    const data = await response.json();
-    setPosts(data)
-    setKategori(data.kategori)
-  }
+  // const get = async () => {
+  //   const response = await fetch(`${process.env.urlApi}/${pid}`)
+  //   const data = await response.json();
+  //   setPosts(data)
+  //   setKategori(data.kategori)
+  // }
 
-  useEffect(() => {
-    get();
-  }, [])
+  // useEffect(() => {
+  //   get();
+  // }, [])
 
   return (
     <Layout title={`${pid}`}>
@@ -40,9 +38,9 @@ export default function Post() {
                 <div className="card-body">
                   <div className="mb-2">
                     {
-                      kategori.map((kategori) => {
+                      posts.kategori.map((kategori,key) => {
                         return (
-                          <Link href={`/kategori/${kategori.slug}`}>
+                          <Link href={`/kategori/${kategori.slug}`} key={key}>
                             <a className="text-dark nodecoration"><b>{kategori.nama_kategori} </b></a>
                           </Link>
                         )
@@ -83,3 +81,14 @@ export default function Post() {
   )
 }
 
+export async function getServerSideProps({params}) {
+  const response = await fetch(`${process.env.urlApi}/${params.pid}`)
+  const data = await response.json();
+  return {
+    props: {
+      posts: data,
+    },
+  }
+}
+
+export default Post;

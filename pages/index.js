@@ -3,19 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { useEffect } from "react"
 
-export default function Home() {
-  const [posts, setPosts] = useState([])
-
-  const get = async () => {
-    const response = await fetch(`${process.env.urlApi}/post`)
-    const data = await response.json();
-    setPosts(data)
-  }
-
-  useEffect(() => {
-    get();
-  }, [])
-
+const Home = ({posts}) => {
   return (
     <Layout title="Homepage">
       <div className="jumbotron-fluid bg-dark jumbo">
@@ -39,18 +27,18 @@ export default function Home() {
         </div>
         <div className="row">
           {
-            posts.map((post) => {
+            posts.map((post,key) => {
               return (
-                <div className="col-md-3 mt-4 d-flex">
+                <div className="col-md-3 mt-4 d-flex" key={key}>
                   <div className="card">
                     <Link href={`/${post.slug}`}>
                       <a><img className="maxwidth100" src="https://www.petanikode.com/images/cover/php8_hude8033e9c98d5c28f45b022c52cf07e5_43016_360x0_resize_box_3.png"/></a>
                     </Link>
                     <div className="card-body flex-fill">
                       {
-                        post.kategori.map((kategori) => {
+                        post.kategori.map((kategori,keykategori) => {
                           return (
-                            <Link href={`/kategori/${kategori.slug}`}>
+                            <Link href={`/kategori/${kategori.slug}`} key={keykategori}>
                               <a className="nodecoration"><b className="text-dark">{kategori.nama_kategori} </b></a>
                             </Link>
                           )
@@ -90,3 +78,15 @@ export default function Home() {
     </Layout>
   )
 }
+
+export async function getServerSideProps(context) {
+  const response = await fetch(`${process.env.urlApi}/post`)
+  const data = await response.json();
+  return {
+    props: {
+      posts: data,
+    },
+  }
+}
+
+export default Home;

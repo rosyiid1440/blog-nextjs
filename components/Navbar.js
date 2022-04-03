@@ -3,7 +3,7 @@ import Link from "next/link"
 export default function Navbar() {
     return (
         <div>
-            <nav className="navbar sd navbar-expand-lg navbar-light bg-white">
+            <nav className="navbar sd navbar-expand-lg navbar-light bg-white py-3">
                 <div className="container">
                     <Link href="/">
                         <a className="navbar-brand">{process.env.appName}</a>
@@ -18,6 +18,8 @@ export default function Navbar() {
                                 <a className="nav-link">Kategori</a>
                             </Link>
                         </li>
+                    </ul>
+                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                         <li className="nav-item">
                             <Link href="/login">
                                 <a className="nav-link">Login</a>
