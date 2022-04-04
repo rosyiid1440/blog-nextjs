@@ -1,6 +1,24 @@
 import Link from "next/link"
+import { useState } from "react";
+import { useEffect } from "react";
+import Cookies from 'js-cookie'
 
-export default function Navbar() {
+function Navbar({ datas }) {
+    const [status, setStatus ] = useState('');
+
+    const get = async (res) => {
+        const login = Cookies.get('loginStatus');
+        if(login){
+            setStatus('true');
+        }else{
+            setStatus('false');
+        }
+    }
+
+    useEffect(() => {
+        get();
+    }, [])
+
     return (
         <div>
             <nav className="navbar sd navbar-expand-lg navbar-light bg-white py-3">
@@ -19,18 +37,28 @@ export default function Navbar() {
                             </Link>
                         </li>
                     </ul>
-                    <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li className="nav-item">
-                            <Link href="/login">
-                                <a className="nav-link">Login</a>
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link href="/register">
-                                <a className="nav-link">Register</a>
-                            </Link>
-                        </li>
-                    </ul>
+                        {status == 'true' ? (
+                            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <Link href="/auth/logout">
+                                        <a className="nav-link">Logout</a>
+                                    </Link>
+                                </li>
+                            </ul>
+                        ) : (
+                            <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                                <li className="nav-item">
+                                    <Link href="/auth/login">
+                                        <a className="nav-link">Login</a>
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link href="/auth/register">
+                                        <a className="nav-link">Register</a>
+                                    </Link>
+                                </li>
+                            </ul>
+                        )}
                     </div>
                 </div>
             </nav>
@@ -45,3 +73,5 @@ export default function Navbar() {
         </div>
     );
 }
+
+export default Navbar;

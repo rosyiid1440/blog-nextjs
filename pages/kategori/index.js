@@ -17,7 +17,7 @@ const Index = ({kategori}) => {
                     {
                         kategori.map((val,key) => {
                             return (
-                                <Link href={`/kategori/${val.slug}`}>
+                                <Link href={`/kategori/${val.slug}`} key={key}>
                                     <a className="col-md-2 text-center text-dark nodecoration">
                                         <div className="card">
                                             <div className="card-body">
